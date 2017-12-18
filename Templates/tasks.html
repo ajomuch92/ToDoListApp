@@ -1,0 +1,118 @@
+<h1>List of Tasks</h1>
+<input placeholder="Search..." type="text" ng-model="filt">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newTaskModal">New <i class="fa fa-plus-circle" aria-hidden="true"></i></button><br><br>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Date</th>
+      <th scope="col">Person</th>
+      <th scope="col">Priority</th>
+      <th scope="col">Status</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="task in list_tasks | filter:filt">
+    	<td>{{$index+1}}</td>
+      <td>{{task.name}}</td>
+      <td>{{task.date | date:"dd-MM-yyyy"}}</td>
+      <td>{{task.person.name}}</td>
+      <td>{{task.priority.name_priority}}</td>
+      <td>{{task.status.status_name}}</td>
+    	<td><button type="button" class="btn btn-success" ng-click="showEditModal($index, task)" ng-disabled="verifyTask(task.status)"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+    	<td><button type="button" class="btn btn-danger" ng-click="deleteTask($index,task.id)" ng-disabled="verifyTask(task.status)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
+    </tr>
+  </tbody>
+</table>
+<div class="modal fade" id="newTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form>
+          <div class="form-group">
+            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter task name" ng-model="taskName">
+          </div>
+          <div class="form-group">
+            <input type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Date" ng-model="taskDate">
+          </div>
+          <div class="form-group">
+            <label>Person in charge</label>
+            <select class="custom-select" ng-model="taskPerson">
+              <option ng-repeat="person in list_pesons" value="{{person.id}}">{{person.name}}</option>
+            </select>
+          </div>  
+          <div class="form-group">
+            <label>Status</label>
+            <select class="custom-select" ng-model="taskStatus">
+              <option ng-repeat="status in list_status" value="{{status.id}}">{{status.status_name}}</option>
+            </select>
+          </div>  
+          <div class="form-group">
+            <label>Priority</label>
+            <select class="custom-select" ng-model="taskPriority">
+              <option ng-repeat="priority in list_priorities" value="{{priority.id}}">{{priority.name_priority}}</option>
+            </select>
+          </div>  
+    		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="saveTask()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter task name" ng-model="taskEdittedName">
+          </div>
+          <div class="form-group">
+            <input type="date" class="form-control" id="exampleInputEmail1" placeholder="Date" ng-model="taskEdittedDate">
+          </div>
+          <div class="form-group">
+            <label>Person in charge</label>
+            <select class="custom-select" ng-model="taskEditted.person.id">
+              <option ng-repeat="person in list_pesons" value="{{person.id}}" ng-selected="taskEditted.person.id==person.id? true:false">{{person.name}}</option>
+            </select>
+          </div>  
+          <div class="form-group">
+            <label>Status</label>
+            <select class="custom-select" ng-model="taskEditted.status.id">
+              <option ng-repeat="status in list_status" value="{{status.id}}" ng-selected="taskEditted.status.id==status.id? true:false">{{status.status_name}}</option>
+            </select>
+          </div>  
+          <div class="form-group">
+            <label>Priority</label>
+            <select class="custom-select" ng-model="taskEditted.priority.id">
+              <option ng-repeat="priority in list_priorities" value="{{priority.id}}" ng-selected="taskEditted.priority.id==priority.id? true:false">{{priority.name_priority}}</option>
+            </select>
+          </div>  
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="updateTask(taskEditted.id)">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

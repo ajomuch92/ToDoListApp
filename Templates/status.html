@@ -1,0 +1,108 @@
+<h1>List of status</h1>
+<input placeholder="Search..." type="text" ng-model="filt">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newStatusModal">New <i class="fa fa-plus-circle" aria-hidden="true"></i></button><br><br>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
+      <th scope="col">Tasks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="status in list_status | filter:filt">
+    	<td>{{$index+1}}</td>
+    	<td>{{status.status_name}}</td>
+    	<td><button type="button" class="btn btn-success" ng-click="showEditModal(status)"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+    	<td><button type="button" class="btn btn-danger" ng-click="deleteStatus($index,status.id)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
+    	<td><button type="button" class="btn btn-warning" ng-click="taskForStatus(status.id)"><i class="fa fa-tasks" aria-hidden="true"></i></button></td>
+    </tr>
+  </tbody>
+</table>
+<div class="modal fade" id="newStatusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New status</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form>
+    		  <div class="form-group">
+    		    <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Enter the name" ng-model="nameStatus">
+    		  </div>
+    		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="saveStatus()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editStatusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit status</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form>
+    		  <div class="form-group">
+    		    <input type="text" class="form-control" id="name" placeholder="Enter the name" ng-model="statusEditted.status_name">
+    		  </div>
+    		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="updateStatus(statusEditted.id)">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tasks for status</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Name</th>
+		      <th scope="col">Date</th>
+		      <th scope="col">Priority</th>
+		      <th scope="col">Person</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	<tr ng-repeat="task in tasks">
+		  		<td>{{$index+1}}</td>
+		  		<td>{{task.name}}</td>
+		  		<td>{{task.date | date:"dd-MM-yyyy"}}</td>
+		  		<td>{{task.priority.name_priority}}</td>
+		  		<td>{{task.person.name}}</td>
+		  	</tr>
+		  </tbody>
+		</table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
